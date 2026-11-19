@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Tiffany & Co. Advent Calendar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Mulish:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night:#00142a;
+    --night-2:#04213a;
+    --blue:#81D8D0;
+    --blue-soft:#7cc9c9;
+    --silver:#cfe3e6;
+    --muted:#8fa9b4;
+    --line:rgba(129,216,208,.28);
+    --serif:"Sterling","Cormorant Garamond",Georgia,serif;
+    --sans:"Avenir Next LT Pro","Avenir Next","Mulish",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--night)}
+  body{
+    font-family:var(--sans);font-weight:300;color:var(--silver);min-height:100vh;
+    -webkit-font-smoothing:antialiased;position:relative;
+  }
+  /* embroidered silk backdrop */
+  .backdrop{
+    position:fixed;inset:0;z-index:-1;
+    background:linear-gradient(180deg,rgba(0,20,42,.25) 0%,rgba(0,20,42,.55) 60%,rgba(0,20,42,.85) 100%),
+               url("img/silk.jpg") center top/cover no-repeat, var(--night);
+  }
+
+  .test-bar{
+    background:rgba(0,0,0,.45);border-bottom:1px solid var(--line);
+    font-size:12px;letter-spacing:.04em;padding:8px 16px;color:var(--muted);
+    display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap
+  }
+  .test-bar select{font:inherit;padding:3px 6px;border:1px solid var(--line);background:var(--night);color:var(--silver);border-radius:2px}
+
+  header{text-align:center;padding:56px 20px 34px}
+  .brand{font-family:var(--serif);font-weight:500;font-size:clamp(26px,4.4vw,40px);letter-spacing:.06em;color:#fff;text-transform:uppercase}
+  .season{font-family:var(--serif);font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:var(--silver);margin-top:10px}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(30px,5vw,46px);color:var(--blue-soft);margin-top:34px;line-height:1.15}
+  .sub{font-family:var(--serif);font-size:19px;color:var(--blue-soft);opacity:.85;max-width:460px;margin:12px auto 0;line-height:1.45}
+  .status{margin-top:22px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--silver)}
+
+  .grid{
+    display:grid;grid-template-columns:repeat(6,1fr);gap:14px;
+    max-width:900px;margin:0 auto;padding:10px 20px 70px
+  }
+  @media (max-width:720px){.grid{grid-template-columns:repeat(4,1fr);gap:10px}}
+  @media (max-width:420px){.grid{grid-template-columns:repeat(3,1fr)}}
+
+  .cell{aspect-ratio:1/1;perspective:900px;position:relative}
+
+  /* closed door = a Blue Box with ribbon */
+  .door{
+    position:absolute;inset:0;border:none;cursor:pointer;font:inherit;color:inherit;
+    background:var(--blue);z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    transform-origin:left center;
+    transition:transform .9s cubic-bezier(.6,.05,.25,1), opacity .35s ease .55s, box-shadow .3s;
+    box-shadow:0 8px 22px rgba(0,0,0,.35);
+  }
+  .door::before,.door::after{content:"";position:absolute;background:rgba(255,255,255,.85)}
+  .door::before{left:50%;top:0;bottom:0;width:7px;transform:translateX(-50%)}
+  .door::after{top:50%;left:0;right:0;height:7px;transform:translateY(-50%)}
+  .door .num{
+    position:relative;z-index:1;font-family:var(--serif);font-size:clamp(24px,4.4vw,34px);
+    color:var(--night);background:var(--blue);padding:0 9px;line-height:1.1
+  }
+  .door:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+  /* locked = dark velvet tile */
+  .cell.locked .door{
+    background:rgba(0,20,42,.55);box-shadow:inset 0 0 0 1px var(--line);cursor:not-allowed;
+    backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)
+  }
+  .cell.locked .door::before,.cell.locked .door::after{display:none}
+  .cell.locked .door .num{background:none;color:var(--blue-soft);opacity:.75}
+
+  /* today */
+  .cell.today .door{box-shadow:0 0 0 1px #fff,0 0 28px rgba(129,216,208,.55);animation:glow 2.4s ease-in-out infinite}
+  @keyframes glow{50%{box-shadow:0 0 0 1px #fff,0 0 44px rgba(129,216,208,.8)}}
+
+  .cell.opened .door{transform:rotateY(-105deg);opacity:0;pointer-events:none;animation:none}
+
+  /* opened content */
+  .inside{
+    position:absolute;inset:0;border:none;cursor:pointer;font:inherit;color:inherit;overflow:hidden;z-index:1;
+    background:var(--night-2) center/cover no-repeat;box-shadow:inset 0 0 0 1px var(--line);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .cell:not(.opened) .inside{visibility:hidden}
+  .inside.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,10,25,.6),rgba(0,0,0,0) 55%)}
+  .inside .num{
+    font-family:var(--serif);font-size:clamp(18px,3.4vw,24px);color:#fff;
+    position:absolute;left:9px;bottom:5px;z-index:2;text-shadow:0 1px 6px rgba(0,0,0,.4)
+  }
+  .inside .wname{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-soft);margin-top:7px;z-index:2}
+  .inside .welcome{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--blue-soft)}
+  .inside:hover{filter:brightness(1.08)}
+
+  .avatar{
+    width:58px;height:58px;border-radius:50%;object-fit:cover;flex:0 0 auto;
+    background:var(--blue);color:var(--night);display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif);font-size:22px;border:2px solid var(--night-2);box-shadow:0 0 0 1px var(--blue)
+  }
+  .inside .avatar{width:46%;height:46%;font-size:clamp(14px,2.6vw,20px);z-index:2}
+  .inside .badge{position:absolute;right:6px;top:6px;width:30px;height:30px;font-size:11px;z-index:2}
+
+  /* modal */
+  .overlay{position:fixed;inset:0;background:rgba(0,8,18,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}
+  .overlay.show{display:flex}
+  .card{
+    background:var(--night);max-width:470px;width:100%;max-height:92vh;overflow:auto;position:relative;text-align:center;
+    box-shadow:0 0 0 1px var(--line),0 30px 80px rgba(0,0,0,.55);animation:rise .45s ease-out
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .card .photo{width:100%;aspect-ratio:16/8;object-fit:cover;object-position:center 35%;display:block}
+  .card.nopic .photo{display:none}
+  .close{position:absolute;top:10px;right:14px;background:none;border:none;font-size:28px;line-height:1;cursor:pointer;color:#fff;z-index:2;text-shadow:0 1px 4px rgba(0,0,0,.5)}
+  .section{padding:28px 34px}
+  .section + .section{border-top:1px solid var(--line)}
+  .kicker{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+  .card h2{font-family:var(--serif);font-weight:400;font-size:30px;line-height:1.15;color:var(--blue-soft);margin-top:10px}
+  .card .theme{display:inline-block;margin-top:12px;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:5px 10px;border:1px solid var(--blue);color:var(--blue)}
+  .card .text{margin-top:16px;font-size:16px;line-height:1.6;color:var(--silver)}
+
+  .winner .row{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;text-align:left}
+  .winner .avatar{width:76px;height:76px;font-size:28px}
+  .winner .nm{font-family:var(--serif);font-size:26px;color:#fff;line-height:1.15}
+  .winner .st{font-size:13px;color:var(--muted);margin-top:3px}
+  .winner .rs{font-size:14px;margin-top:7px;color:var(--blue);font-weight:600}
+  .winner .of{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--blue-soft);margin-top:6px}
+  .winner .wait{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--blue-soft);margin-top:10px}
+
+  .ok{
+    margin-top:24px;background:var(--blue);color:var(--night);border:none;padding:12px 30px;
+    font:inherit;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;cursor:pointer
+  }
+  [hidden]{display:none!important}
+  .gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;
+    background:linear-gradient(180deg,rgba(0,20,42,.35),rgba(0,20,42,.85)),url("img/silk.jpg") center/cover,var(--night)}
+  .gate-box{text-align:center;max-width:380px;width:100%}
+  .gate-box h1{margin:28px 0 30px}
+  .gate-box input{display:block;width:100%;margin-top:12px;padding:13px 14px;background:rgba(0,20,42,.7);border:1px solid var(--line);
+    color:#fff;font:inherit;font-size:16px;letter-spacing:.2em;text-align:center}
+  .gate-box input:focus{outline:1px solid var(--blue)}
+  .gate-box .ok{width:100%;margin-top:14px}
+  .gate-err{min-height:20px;margin-top:12px;font-size:13px;color:#f0b8b8}
+  footer{text-align:center;font-family:var(--serif);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 20px 44px}
+</style>
+</head>
+<body>
+<div class="backdrop" aria-hidden="true"></div>
+
+<div class="gate" id="gate" hidden>
+  <form class="gate-box" id="gate-form">
+    <div class="brand">Tiffany &amp; Co.</div>
+    <div class="season">Holiday 2026</div>
+    <h1>The Advent Calendar</h1>
+    <label for="pw" class="kicker">Enter the access code</label>
+    <input id="pw" type="password" autocomplete="off" autocapitalize="characters">
+    <button class="ok" type="submit">Enter</button>
+    <div class="gate-err" id="gate-err"></div>
+  </form>
+</div>
+
+<div class="test-bar" id="testbar" hidden>
+  <span>TEST MODE · Preview the calendar as if today were:</span>
+  <select id="sim"><option value="real">Real date</option></select>
+</div>
+
+<header>
+  <div class="brand">Tiffany &amp; Co.</div>
+  <div class="season">Holiday 2026</div>
+  <h1>The Advent Calendar</h1>
+  <p class="sub">Each day, a door reveals yesterday's winner and today's challenge.</p>
+  <div class="status" id="status"></div>
+</header>
+
+<main class="grid" id="grid" aria-label="Advent calendar doors"></main>
+
+<footer>FNBM · December 2026</footer>
+
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="m-title">
+  <div class="card" id="card">
+    <button class="close" id="close" aria-label="Close">&times;</button>
+    <img class="photo" id="m-photo" alt="">
+    <div class="section winner" id="m-winner"></div>
+    <div class="section">
+      <div class="kicker" id="m-day"></div>
+      <h2 id="m-title"></h2>
+      <span class="theme" id="m-theme"></span>
+      <p class="text" id="m-text"></p>
+      <button class="ok" id="ok">Close</button>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+
+
+
+// WINNERS: key = day of the challenge. Shown from the next day on.
+// photo: 'img/winners/dayX.jpg' once received; null shows initials.
+const TEST_WINNERS = {
+  1:{name:"Camille D.", store:"Paris Rue de la Paix", result:"14 completed journeys", photo:null},
+  2:{name:"Hugo B.", store:"Monaco", result:"92% birthday capture", photo:null},
+  3:{name:"Sofia L.", store:"Paris Champs-Élysées", result:"Schlumberger Sixteen Stone ring", photo:null},
+  4:{name:"Daan V.", store:"Amsterdam PC Hooftstraat", result:"UPT 4.5", photo:null},
+  5:{name:"Léa M.", store:"Nice", result:"Lock bangle in diamonds", photo:null},
+  6:{name:"Noah P.", store:"Brussels", result:"Highest AUR of the day", photo:null},
+  7:{name:"Inès R.", store:"Paris Galeries Lafayette", result:"Stayed late to close a bridal sale", photo:null},
+  8:{name:"Lotte K.", store:"De Bijenkorf", result:"HardWear graduated necklace", photo:null},
+  9:{name:"Jules T.", store:"Paris Avenue Montaigne", result:"21 transactions", photo:null},
+  10:{name:"Emma G.", store:"Paris Le Bon Marché", result:"Bone cuff in gold", photo:null},
+  11:{name:"Lucas F.", store:"Monaco", result:"6 ICONS on one ticket", photo:null}
+};
+const TEST = location.hash === '#test';
+if (TEST) document.getElementById('testbar').hidden = false;
+const W = (TEST && Object.keys(WINNERS).length === 0) ? TEST_WINNERS : WINNERS;
+
+const PHOTO_DAYS = [1,3,6,8,10,13,15,17,20,22,24];
+const PHOTOS = ['img/bluebox.jpg','img/amanda1.jpg','img/box.jpg','img/onfigure8.jpg','img/sixteenstone.jpg','img/onfigure4.jpg','img/onfigure6.jpg','img/bor2.jpg','img/onfigure5.jpg','img/onfigure1.jpg','img/amanda.jpg'];
+
+const grid=document.getElementById('grid');
+const sim=document.getElementById('sim');
+const statusEl=document.getElementById('status');
+const overlay=document.getElementById('overlay');
+
+for(let d=1;d<=24;d++){const o=document.createElement('option');o.value=d;o.textContent=d+' December';sim.appendChild(o);}
+
+const STORE_KEY='tco-advent-opened';
+function loadOpened(){try{return new Set(JSON.parse(localStorage.getItem(STORE_KEY)||'[]'));}catch(e){return new Set();}}
+function saveOpened(s){try{localStorage.setItem(STORE_KEY,JSON.stringify([...s]));}catch(e){}}
+let opened=loadOpened();
+
+// 0 = before 1 Dec, 1..24 = December day, 25 = after
+function currentDay(){
+  if(sim.value!=='real') return parseInt(sim.value,10);
+  const n=new Date(),m=n.getMonth(),d=n.getDate();
+  if(m===11) return Math.min(d,25);
+  if(m===0) return 25;
+  return 0;
+}
+function photoFor(day){const i=PHOTO_DAYS.indexOf(day);return i<0?null:PHOTOS[i%PHOTOS.length];}
+// Door N reveals the winner of challenge N-1
+function revealedWinner(day){return day>1?W[day-1]||null:null;}
+function initials(n){return n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();}
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
+function avatarHTML(w,cls,day){
+  const ini='<div class="avatar '+(cls||'')+'">'+esc(initials(w.name))+'</div>';
+  if (w.photo===null || !day) return ini;
+  const src=w.photo || ('winners/day'+String(day).padStart(2,'0')+'.jpg');
+  return '<img class="avatar '+(cls||'')+'" src="'+src+'" alt="" data-ini="'+esc(initials(w.name))+'" onerror="avatarFallback(this)">';
+}
+function avatarFallback(img){
+  const d=document.createElement('div'); d.className=img.className; d.textContent=img.dataset.ini; img.replaceWith(d);
+}
+
+function render(){
+  const today=currentDay();
+  grid.innerHTML='';
+  statusEl.textContent = today===0 ? 'The first door opens on 1 December'
+                       : today>=25 ? 'All doors are open · Happy holidays'
+                       : 'Door '+today+' is waiting for you';
+
+  CHALLENGES.forEach((c,i)=>{
+    const day=i+1, unlocked=day<=today;
+    const cell=document.createElement('div');
+    cell.className='cell';
+    if(!unlocked) cell.classList.add('locked');
+    if(day===today) cell.classList.add('today');
+    if(unlocked&&opened.has(day)) cell.classList.add('opened');
+
+    const inside=document.createElement('button');
+    inside.className='inside';
+    const ph=photoFor(day), w=revealedWinner(day);
+    let html='';
+    if(ph){
+      inside.classList.add('photo');
+      inside.style.backgroundImage='url('+ph+')';
+      if(w) html+=avatarHTML(w,'badge',day-1);
+    } else if(w){
+      html+=avatarHTML(w,'',day-1)+'<span class="wname">'+esc(w.name.split(' ')[0])+'</span>';
+    }
+    if(day===1&&!ph) html+='<span class="welcome">Welcome</span>';
+    html+='<span class="num">'+day+'</span>';
+    inside.innerHTML=html;
+    inside.setAttribute('aria-label','View door '+day);
+    inside.addEventListener('click',()=>show(day));
+    if(!cell.classList.contains('opened')) inside.tabIndex=-1;
+
+    const door=document.createElement('button');
+    door.className='door';
+    door.innerHTML='<span class="num">'+day+'</span>';
+    door.setAttribute('aria-label',unlocked?'Open door '+day:'Door '+day+' is locked');
+    door.addEventListener('click',()=>{
+      if(!unlocked){door.animate([{transform:'translateX(0)'},{transform:'translateX(-4px)'},{transform:'translateX(4px)'},{transform:'translateX(0)'}],{duration:280});return;}
+      cell.classList.add('opened');opened.add(day);saveOpened(opened);inside.tabIndex=0;
+      setTimeout(()=>show(day),650);
+    });
+
+    cell.appendChild(inside);cell.appendChild(door);
+    grid.appendChild(cell);
+  });
+}
+
+function show(day){
+  const c=CHALLENGES[day-1], ph=photoFor(day), card=document.getElementById('card');
+  card.classList.toggle('nopic',!ph);
+  if(ph) document.getElementById('m-photo').src=ph;
+
+  // 1) yesterday's winner
+  const wb=document.getElementById('m-winner');
+  if(day===1){
+    wb.innerHTML='<div class="kicker">Welcome</div><div class="wait">The holiday season begins. A new door every day until the 24th, and a winner revealed each morning.</div>';
+  } else {
+    const w=W[day-1], prev=CHALLENGES[day-2];
+    wb.innerHTML = w
+      ? '<div class="kicker">Yesterday\'s winner</div><div class="of">'+esc(prev.t)+'</div><div class="row">'+avatarHTML(w,'',day-1)+
+        '<div><div class="nm">'+esc(w.name)+'</div><div class="st">'+esc(w.store)+'</div><div class="rs">'+esc(w.result)+'</div></div></div>'
+      : '<div class="kicker">Yesterday\'s winner</div><div class="of">'+esc(prev.t)+'</div><div class="wait">To be announced soon.</div>';
+  }
+  // 2) today's challenge
+  document.getElementById('m-day').textContent=(day===currentDay()?'Today\'s challenge':'Challenge')+' · Day '+day;
+  document.getElementById('m-title').textContent=c.t;
+  document.getElementById('m-theme').textContent=c.th;
+  document.getElementById('m-text').textContent=c.x;
+
+  overlay.classList.add('show');card.scrollTop=0;
+  document.getElementById('ok').focus({preventScroll:true});
+}
+function hide(){overlay.classList.remove('show');}
+document.getElementById('close').addEventListener('click',hide);
+document.getElementById('ok').addEventListener('click',hide);
+overlay.addEventListener('click',e=>{if(e.target===overlay)hide();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hide();});
+sim.addEventListener('change',render);
+
+if (TEST) { sim.value='12'; for(let d=1;d<=11;d++) opened.add(d); }
+render();
+
+// ---- Access code (first visit only, then remembered on the device) ----
+const CODE_HASH='5acb0e77a569aca90a8b669939107f84cbf86068668f6e32d6da30af1998a235';
+const GATE_KEY='tco-advent-access';
+async function sha(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+function hasAccess(){try{return localStorage.getItem(GATE_KEY)===CODE_HASH;}catch(e){return false;}}
+const gate=document.getElementById('gate');
+if(!hasAccess()){ gate.hidden=false; setTimeout(()=>document.getElementById('pw').focus(),50); }
+document.getElementById('gate-form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const v=document.getElementById('pw').value.trim().toUpperCase();
+  if(await sha(v)===CODE_HASH){ try{localStorage.setItem(GATE_KEY,CODE_HASH);}catch(_){} gate.hidden=true; }
+  else document.getElementById('gate-err').textContent='Incorrect code. Please try again.';
+});
+</script>
+</body>
+</html>
