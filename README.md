@@ -4,7 +4,7 @@ Interactive advent calendar for the FNBM boutiques, 1–24 December.
 Each door reveals **yesterday's winner** and **today's challenge**.
 
 - Site link: `https://<account>.github.io/<repository>/`
-- Access code: `FNBM2026` (asked once per device)
+- Access code: ask Mila (asked once per device)
 - Test view: add `#test` at the end of the link to preview any date
 
 ---
@@ -17,7 +17,7 @@ Do it every morning, before the boutiques open.
 
 1. Open the **`winners`** folder in this repository.
 2. Click **Add file → Upload files**.
-3. Drop the photo, **renamed with the day number of the challenge**: `day01.jpg`, `day02.jpg` … `day23.jpg`.
+3. Drop the photo, **renamed with the day number of the challenge**: `day01.jpg`, `day02.jpg` … `day23.jpg` (Saturdays: `day05-1.jpg`, `day05-2.jpg`…).
 4. Click **Commit changes**.
 
 Rules for the photo:
@@ -42,6 +42,19 @@ const WINNERS = {
 
 - The number = **the day of the challenge** that was won (yesterday's date).
 - Keep the quotes `" "`, the colons `:` and the **comma at the end of each line**.
+
+**Saturdays (5, 12, 19): one winner per boutique.** Put the winners between `[` and `]`:
+
+```js
+  5: [
+    {name: "Hugo B.", store: "Monaco", result: "€12K via appointments"},
+    {name: "Léa M.", store: "Nice", result: "€9K via appointments"},
+  ],
+```
+
+Photos for Saturdays: `day05-1.jpg`, `day05-2.jpg`… in the same order as the list.
+
+**Days 7 and 21 (store managers):** one line as usual, with the store manager's name and the store's growth as result (e.g. `"+24% vs last year"`).
 
 4. Click **Commit changes**. The site updates within 1 to 2 minutes.
 

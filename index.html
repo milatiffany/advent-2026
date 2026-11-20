@@ -138,6 +138,21 @@
   .winner .of{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--blue-soft);margin-top:6px}
   .winner .wait{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--blue-soft);margin-top:10px}
 
+  .card .scope{margin-top:10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#fff}
+  .sub-scope{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#fff;margin-top:8px}
+  .teaser{font-size:14px;line-height:1.6;color:var(--silver);margin-top:12px}
+  .wlist{list-style:none;margin-top:14px;text-align:left}
+  .wlist li{display:flex;align-items:center;gap:12px;padding:9px 0;border-top:1px solid var(--line)}
+  .wlist li:first-child{border-top:none}
+  .wlist .avatar{width:40px;height:40px;font-size:15px}
+  .wlist .nm{font-size:18px}
+  .wlist .st{font-size:12px;margin-top:1px}
+  .wlist li>div:nth-child(2){flex:1}
+  .wlist .rs{margin-top:0;font-size:13px;text-align:right}
+  .stack{display:flex;z-index:2}
+  .stack .avatar{width:34px;height:34px;font-size:12px;margin-left:-9px}
+  .stack .avatar:first-child{margin-left:0}
+  .inside .badge.count{display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--blue);color:var(--night);font-weight:600;font-size:12px;box-shadow:0 0 0 1px var(--night-2)}
   .ok{
     margin-top:24px;background:var(--blue);color:var(--night);border:none;padding:12px 30px;
     font:inherit;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;cursor:pointer
@@ -152,6 +167,46 @@
   .gate-box input:focus{outline:1px solid var(--blue)}
   .gate-box .ok{width:100%;margin-top:14px}
   .gate-err{min-height:20px;margin-top:12px;font-size:13px;color:#f0b8b8}
+
+  /* Today's challenge: highlighted panel */
+  .section.challenge{background:var(--blue);color:var(--night);padding:34px 30px 32px;position:relative;overflow:hidden;border-top:none}
+  .section.challenge .kicker{color:var(--night);opacity:.75;font-weight:600}
+  .section.challenge h2{color:var(--night);font-size:clamp(34px,7vw,44px);margin-top:12px;
+    background:linear-gradient(100deg,var(--night) 42%,#ffffff 50%,var(--night) 58%) 0 0/300% 100% no-repeat;
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .section.challenge .theme{border-color:var(--night);color:var(--night);font-weight:600}
+  .section.challenge .scope{color:var(--night);opacity:.8}
+  .section.challenge .text{color:var(--night);font-size:18px;font-weight:400;line-height:1.55;margin-top:18px}
+  .section.challenge .ok{background:var(--night);color:var(--blue)}
+  .section.challenge::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.45) 0 2px,transparent 3px),
+               radial-gradient(circle at 85% 30%,rgba(255,255,255,.4) 0 1.5px,transparent 2.5px),
+               radial-gradient(circle at 70% 80%,rgba(255,255,255,.35) 0 2px,transparent 3px),
+               radial-gradient(circle at 25% 75%,rgba(255,255,255,.35) 0 1.5px,transparent 2.5px);
+    opacity:0}
+  .overlay.show .section.challenge{animation:reveal .7s cubic-bezier(.2,.8,.2,1) .45s both}
+  .overlay.show .section.challenge h2{animation:shine 1.6s ease-out 1s both}
+  .overlay.show .section.challenge::before{animation:twinkle 2.2s ease-in-out 1s 2}
+  @keyframes reveal{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+  @keyframes shine{from{background-position:100% 0}to{background-position:0% 0}}
+  @keyframes twinkle{0%,100%{opacity:0}50%{opacity:1}}
+  .card .photo{aspect-ratio:16/6}
+  .prize{margin-top:18px;display:inline-flex;align-items:center;justify-content:center;gap:10px;color:#fff;padding:8px 16px;border:1px solid var(--line)}
+  .prize .gift{width:26px;height:21px;position:relative;background:var(--blue);flex:0 0 auto}
+  .prize .gift::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:4px;transform:translateX(-50%);background:#fff}
+  .prize .gift::after{content:"";position:absolute;top:6px;left:0;right:0;height:4px;background:#fff}
+  .prize>span:last-child{text-align:left}
+  .prize .lbl{font-size:9px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+  .prize .val{font-family:var(--serif);font-size:20px;line-height:1.1;color:var(--blue)}
+  .overlay.show .prize .gift{animation:wiggle .6s ease-in-out .3s 2}
+  @keyframes wiggle{25%{transform:rotate(-9deg)}75%{transform:rotate(9deg)}}
+  .reveal-note{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:8px 16px;
+    border:1px dashed var(--night);font-size:11px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--night)}
+  .reveal-note::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--night)}
+  .reveal-note.live::before{animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{50%{transform:scale(1.7);opacity:.35}}
+  .section.challenge .ok{display:block;margin:22px auto 0}
+  @media (prefers-reduced-motion:reduce){.overlay.show .section.challenge,.overlay.show .section.challenge h2,.overlay.show .section.challenge::before{animation:none}}
   footer{text-align:center;font-family:var(--serif);font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);padding:0 20px 44px}
 </style>
 </head>
@@ -179,7 +234,7 @@
   <div class="brand">Tiffany &amp; Co.</div>
   <div class="season">Holiday 2026</div>
   <h1>The Advent Calendar</h1>
-  <p class="sub">Each day, a door reveals yesterday's winner and today's challenge.</p>
+  <p class="sub">Each morning, a door reveals yesterday's winner and today's challenge.</p>
   <div class="status" id="status"></div>
 </header>
 
@@ -192,11 +247,13 @@
     <button class="close" id="close" aria-label="Close">&times;</button>
     <img class="photo" id="m-photo" alt="">
     <div class="section winner" id="m-winner"></div>
-    <div class="section">
+    <div class="section challenge" id="m-challenge">
       <div class="kicker" id="m-day"></div>
       <h2 id="m-title"></h2>
       <span class="theme" id="m-theme"></span>
+      <div class="scope" id="m-scope"></div>
       <p class="text" id="m-text"></p>
+      <div class="reveal-note" id="m-reveal"></div>
       <button class="ok" id="ok">Close</button>
     </div>
   </div>
@@ -207,20 +264,42 @@
 
 
 
-// WINNERS: key = day of the challenge. Shown from the next day on.
-// photo: 'img/winners/dayX.jpg' once received; null shows initials.
+// Sample winners, used only in test mode (#test) while WINNERS is empty
 const TEST_WINNERS = {
-  1:{name:"Camille D.", store:"Paris Rue de la Paix", result:"14 completed journeys", photo:null},
-  2:{name:"Hugo B.", store:"Monaco", result:"92% birthday capture", photo:null},
-  3:{name:"Sofia L.", store:"Paris Champs-Élysées", result:"Schlumberger Sixteen Stone ring", photo:null},
-  4:{name:"Daan V.", store:"Amsterdam PC Hooftstraat", result:"UPT 4.5", photo:null},
-  5:{name:"Léa M.", store:"Nice", result:"Lock bangle in diamonds", photo:null},
-  6:{name:"Noah P.", store:"Brussels", result:"Highest AUR of the day", photo:null},
-  7:{name:"Inès R.", store:"Paris Galeries Lafayette", result:"Stayed late to close a bridal sale", photo:null},
-  8:{name:"Lotte K.", store:"De Bijenkorf", result:"HardWear graduated necklace", photo:null},
-  9:{name:"Jules T.", store:"Paris Avenue Montaigne", result:"21 transactions", photo:null},
-  10:{name:"Emma G.", store:"Paris Le Bon Marché", result:"Bone cuff in gold", photo:null},
-  11:{name:"Lucas F.", store:"Monaco", result:"6 ICONS on one ticket", photo:null}
+  1:{name:"Camille D.", store:"Paris Rue de la Paix", result:"Tiffany Setting, 1.2 ct", photo:null},
+  2:{name:"Hugo B.", store:"Monaco", result:"9 silver HardWear pieces", photo:null},
+  3:{name:"Sofia L.", store:"Paris Champs-Élysées", result:"11 appointments", photo:null},
+  4:{name:"Daan V.", store:"Amsterdam PC Hooftstraat", result:"8 prospects created", photo:null},
+  5:[
+    {name:"Camille D.", store:"Paris Avenue Montaigne", result:"€18K via appointments", photo:null},
+    {name:"Hugo B.", store:"Paris Champs-Élysées", result:"€15K via appointments", photo:null},
+    {name:"Sofia L.", store:"Paris Rue de la Paix", result:"€14K via appointments", photo:null},
+    {name:"Inès R.", store:"Paris Galeries Lafayette", result:"€21K via appointments", photo:null},
+    {name:"Jules T.", store:"Paris Le Bon Marché", result:"€12K via appointments", photo:null},
+    {name:"Léa M.", store:"Monaco", result:"€16K via appointments", photo:null},
+    {name:"Noah P.", store:"Nice", result:"€9K via appointments", photo:null},
+    {name:"Emma G.", store:"Brussels", result:"€11K via appointments", photo:null},
+    {name:"Daan V.", store:"Amsterdam PC Hooftstraat", result:"€13K via appointments", photo:null},
+    {name:"Lotte K.", store:"De Bijenkorf", result:"€10K via appointments", photo:null}
+  ],
+  6:{name:"Noah P.", store:"Brussels", result:"5 tickets with a full set", photo:null},
+  7:{name:"Inès R.", store:"Paris Galeries Lafayette", result:"+24% vs last year", photo:null},
+  8:{name:"Lotte K.", store:"De Bijenkorf", result:"83% conversion (6 appointments)", photo:null},
+  9:{name:"Jules T.", store:"Paris Avenue Montaigne", result:"Knot necklace in diamonds", photo:null},
+  10:{name:"Emma G.", store:"Paris Le Bon Marché", result:"€31K appointment sale", photo:null},
+  11:{name:"Lucas F.", store:"Monaco", result:"HardWear graduated necklace", photo:null}
+  ,12:[{name:"Camille D.", store:"Paris Avenue Montaigne", result:"38 transactions", photo:null},{name:"Léa M.", store:"Monaco", result:"22 transactions", photo:null},{name:"Daan V.", store:"Amsterdam PC Hooftstraat", result:"25 transactions", photo:null}],
+  13:{name:"Emma G.", store:"Brussels", result:"14 units in appointments", photo:null},
+  14:{name:"Sofia L.", store:"Paris Champs-Élysées", result:"€46K Schlumberger", photo:null},
+  15:{name:"Hugo B.", store:"Nice", result:"19 appointments booked", photo:null},
+  16:{name:"Inès R.", store:"Paris Rue de la Paix", result:"Bone cuff in gold", photo:null},
+  17:{name:"Jules T.", store:"Paris Le Bon Marché", result:"€42K ticket", photo:null},
+  18:{name:"Noah P.", store:"De Bijenkorf", result:"112% of target", photo:null},
+  19:[{name:"Lotte K.", store:"De Bijenkorf", result:"7 prospects converted", photo:null},{name:"Lucas F.", store:"Paris Galeries Lafayette", result:"9 prospects converted", photo:null}],
+  20:{name:"Camille D.", store:"Paris Avenue Montaigne", result:"16 Icons", photo:null},
+  21:{name:"Léa M.", store:"Monaco", result:"+31% vs last year", photo:null},
+  22:{name:"Daan V.", store:"Amsterdam PC Hooftstraat", result:"€28K Icons", photo:null},
+  23:{name:"Emma G.", store:"Brussels", result:"€19K from new prospects", photo:null}
 };
 const TEST = location.hash === '#test';
 if (TEST) document.getElementById('testbar').hidden = false;
@@ -252,12 +331,18 @@ function currentDay(){
 function photoFor(day){const i=PHOTO_DAYS.indexOf(day);return i<0?null:PHOTOS[i%PHOTOS.length];}
 // Door N reveals the winner of challenge N-1
 function revealedWinner(day){return day>1?W[day-1]||null:null;}
+function asList(w){return Array.isArray(w)?w:[w];}
+function prizeHTML(ch,multi){
+  return '<div class="prize"><span class="gift"></span><span><span class="lbl">'+(multi?'Each winner receives':'Wins')+
+    '</span><br><span class="val">'+esc(ch.prize||PRIZE)+'</span></span></div>';
+}
+const SCOPE_LABEL={cluster:'One winner across FNBM',store:'One winner per boutique',managers:'Store managers'};
 function initials(n){return n.split(/\s+/).map(w=>w[0]).slice(0,2).join('').toUpperCase();}
 function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML;}
-function avatarHTML(w,cls,day){
+function avatarHTML(w,cls,day,k){
   const ini='<div class="avatar '+(cls||'')+'">'+esc(initials(w.name))+'</div>';
   if (w.photo===null || !day) return ini;
-  const src=w.photo || ('winners/day'+String(day).padStart(2,'0')+'.jpg');
+  const src=w.photo || ('winners/day'+String(day).padStart(2,'0')+(k?'-'+k:'')+'.jpg');
   return '<img class="avatar '+(cls||'')+'" src="'+src+'" alt="" data-ini="'+esc(initials(w.name))+'" onerror="avatarFallback(this)">';
 }
 function avatarFallback(img){
@@ -283,10 +368,13 @@ function render(){
     inside.className='inside';
     const ph=photoFor(day), w=revealedWinner(day);
     let html='';
+    const multi=Array.isArray(w);
     if(ph){
       inside.classList.add('photo');
       inside.style.backgroundImage='url('+ph+')';
-      if(w) html+=avatarHTML(w,'badge',day-1);
+      if(w) html+= multi ? '<span class="badge count">'+w.length+'</span>' : avatarHTML(w,'badge',day-1);
+    } else if(multi){
+      html+='<div class="stack">'+w.slice(0,3).map((x,k)=>avatarHTML(x,'',day-1,k+1)).join('')+'</div><span class="wname">'+w.length+' winners</span>';
     } else if(w){
       html+=avatarHTML(w,'',day-1)+'<span class="wname">'+esc(w.name.split(' ')[0])+'</span>';
     }
@@ -320,20 +408,40 @@ function show(day){
   // 1) yesterday's winner
   const wb=document.getElementById('m-winner');
   if(day===1){
-    wb.innerHTML='<div class="kicker">Welcome</div><div class="wait">The holiday season begins. A new door every day until the 24th, and a winner revealed each morning.</div>';
+    wb.innerHTML='<div class="kicker">Welcome</div>'+
+      '<div class="wait">Every morning until the 24th, a new door reveals yesterday\'s winner and today\'s challenge.</div>'+
+      '<p class="teaser">Some doors will reward what you build over several days, not just one. '+
+      'Every appointment booked, every prospect created and every prospect converted from today could make the difference. Get ready.</p>'+
+      '<p class="teaser">Every Saturday, one winner per boutique. And store managers: two doors are just for you.</p>'+
+      '<p class="teaser">Every winner receives a '+esc(PRIZE)+'.</p>';
   } else {
     const w=W[day-1], prev=CHALLENGES[day-2];
-    wb.innerHTML = w
-      ? '<div class="kicker">Yesterday\'s winner</div><div class="of">'+esc(prev.t)+'</div><div class="row">'+avatarHTML(w,'',day-1)+
-        '<div><div class="nm">'+esc(w.name)+'</div><div class="st">'+esc(w.store)+'</div><div class="rs">'+esc(w.result)+'</div></div></div>'
-      : '<div class="kicker">Yesterday\'s winner</div><div class="of">'+esc(prev.t)+'</div><div class="wait">To be announced soon.</div>';
+    let h='<div class="kicker">'+(Array.isArray(w)?'Yesterday\'s winners':'Yesterday\'s winner')+'</div><div class="of">'+esc(prev.t)+'</div>';
+    if(!w){
+      h+='<div class="wait">To be announced soon.</div>';
+    } else if(Array.isArray(w)){
+      h+='<div class="sub-scope">One winner per boutique</div><ul class="wlist">'+
+        w.map((x,k)=>'<li>'+avatarHTML(x,'',day-1,k+1)+'<div><div class="nm">'+esc(x.name)+'</div><div class="st">'+esc(x.store)+'</div></div><div class="rs">'+esc(x.result)+'</div></li>').join('')+'</ul>'+prizeHTML(prev,true);
+    } else {
+      h+=(prev.scope==='managers'?'<div class="sub-scope">Store manager</div>':'')+
+        '<div class="row">'+avatarHTML(w,'',day-1)+'<div><div class="nm">'+esc(w.name)+'</div><div class="st">'+esc(w.store)+'</div><div class="rs">'+esc(w.result)+'</div></div></div>'+prizeHTML(prev,false);
+    }
+    wb.innerHTML=h;
   }
   // 2) today's challenge
-  document.getElementById('m-day').textContent=(day===currentDay()?'Today\'s challenge':'Challenge')+' · Day '+day;
+  document.getElementById('m-day').textContent=(day===currentDay()?'Today\'s challenge':'The challenge')+' · Day '+day;
   document.getElementById('m-title').textContent=c.t;
   document.getElementById('m-theme').textContent=c.th;
+  document.getElementById('m-scope').textContent=SCOPE_LABEL[c.scope]||'';
   document.getElementById('m-text').textContent=c.x;
+  const rv=document.getElementById('m-reveal'), today=currentDay();
+  const plural=c.scope==='store'?'Winners':'Winner';
+  rv.classList.toggle('live', day===today);
+  rv.textContent = day===24 ? plural+' revealed after Christmas'
+                 : day===today ? plural+' revealed tomorrow'
+                 : plural+' revealed in door '+(day+1);
 
+  overlay.classList.remove('show'); void overlay.offsetWidth;
   overlay.classList.add('show');card.scrollTop=0;
   document.getElementById('ok').focus({preventScroll:true});
 }
@@ -342,7 +450,7 @@ document.getElementById('close').addEventListener('click',hide);
 document.getElementById('ok').addEventListener('click',hide);
 overlay.addEventListener('click',e=>{if(e.target===overlay)hide();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hide();});
-sim.addEventListener('change',render);
+sim.addEventListener('change',()=>{ if(TEST){ const d=currentDay(); for(let i=1;i<d;i++) opened.add(i); } render(); });
 
 if (TEST) { sim.value='12'; for(let d=1;d<=11;d++) opened.add(d); }
 render();
